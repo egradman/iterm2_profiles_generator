@@ -17,7 +17,7 @@ def main():
   home = os.getenv("HOME")
 
   with open(f"{home}/.iterm2_profiles.yml", "r") as f:
-    yaml_data = yaml.load(f)
+    yaml_data = yaml.load(f, Loader=yaml.FullLoader)
 
   profiles = []
   for name, d in yaml_data["profiles"].items():
@@ -40,10 +40,10 @@ def main():
     "Profiles": profiles
   }
 
-  #print(json.dumps(out, indent=2))
-
   with open(f"{home}/.iterm2_profiles", "w") as f:
     json.dump(out, f)
+
+  print(f"generated {len(profiles)} profiles")
 
 if __name__=='__main__':
   main()
