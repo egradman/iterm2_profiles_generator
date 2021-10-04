@@ -20,9 +20,11 @@ def main():
     yaml_data = yaml.load(f, Loader=yaml.FullLoader)
 
   profiles = []
-  for name, d in yaml_data["profiles"].items():
+  for name, _d in yaml_data["profiles"].items():
+    d = dict(yaml_data.get("defaults", {}))
+    d.update(_d)
+
     d["name"] = name
-    d.update(yaml_data.get("defaults", {}))
 
 
     d["red"], d["green"], d["blue"] = hex2rgb(d.get("bg_color", 0x000000))
@@ -41,7 +43,7 @@ def main():
   }
 
   with open(f"{home}/.iterm2_profiles", "w") as f:
-    json.dump(out, f)
+    json.dump(out, f, indent=2)
 
   print(f"generated {len(profiles)} profiles")
 
